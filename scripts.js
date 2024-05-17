@@ -199,7 +199,7 @@ getElement("[data-list-items]").addEventListener("click", (event) => {
   });
 
   // Book Previews as web components.
-class BookPreviewComponent extends HTMLElement {
+class bookPreviewComponent extends HTMLElement {
   constructor() {
     super();
   
@@ -222,3 +222,41 @@ class BookPreviewComponent extends HTMLElement {
     `;
   }
 }
+
+customElements.define('book-preview', bookPreviewComponent);
+
+// FilterDropdown as web components
+class FilterDropdown extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback() {
+      const { label, options } = this.dataset;
+      const select = document.createElement('select');
+      const defaultOption = document.createElement('option');
+      defaultOption.value = 'any';
+      defaultOption.innerText = `All ${label}`;
+      select.appendChild(defaultOption);
+      Object.entries(JSON.parse(options)).forEach(([id, name]) => {
+        const option = document.createElement('option');
+        option.value = id;
+        option.innerText = name;
+        select.appendChild(option);
+      });
+      select.addEventListener('change', () => this.dispatchEvent(new Event('filterChange')));
+      this.shadowRoot.appendChild(select);
+      const style = document.createElement('style');
+      style.textContent = `
+        select {
+          /* Add your select styles here */
+        }
+      `;
+      this.shadowRoot.appendChild(style);
+    }
+  }
+  
+  // Define custom elements for genre and author dropdowns
+  customElements.define('genre-dropdown', FilterDropdown);
+  customElements.define('author-dropdown', FilterDropdown);
