@@ -296,4 +296,74 @@ class FilterDropdown extends HTMLElement {
   
   customElements.define('theme-switcher', ThemeSwitcher);
 
+  // Search-form web components
+  class SearchForm extends HTMLElement {
+    constructor() {
+      super();
+      this.attachShadow({ mode: 'open' });
+    }
   
+    connectedCallback() {
+      this.render();
+      this.shadowRoot.querySelector('form').addEventListener('submit', this.handleFormSubmit.bind(this));
+    }
+  
+    render() {
+      const form = document.createElement('form');
+      form.innerHTML = `
+        <input type="text" placeholder="Search..." name="search" />
+        <button type="submit">Search</button>
+      `;
+      this.shadowRoot.appendChild(form);
+    }
+  
+    handleFormSubmit(event) {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      const searchQuery = formData.get('search');
+      this.dispatchEvent(new CustomEvent('search', { detail: searchQuery }));
+    }
+  }
+  
+  customElements.define('search-form', SearchForm);
+
+// showMoreButton as web components
+class ShowMoreButton extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+    this.remainingBooks = 0;
+  }
+
+  static get observedAttributes() {
+    return ['remaining'];
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'remaining') {
+      this.remainingBooks = parseInt(newValue);
+      this.render();
+    }
+  }
+
+  connectedCallback() {
+    this.render();
+    this.shadowRoot.querySelector('button').addEventListener('click', this.handleButtonClick.bind(this));
+  }
+
+  render() {
+    const button = document.createElement('button');
+    button.innerHTML = `
+      <span>Show more</span>
+      <span class="list__remaining">(${this.remainingBooks > 0 ? this.remainingBooks : 0})</span>
+    `;
+    this.shadowRoot.innerHTML = '';
+    this.shadowRoot.appendChild(button);
+  }
+
+  handleButtonClick() {
+    this.dispatchEvent(new CustomEvent('showMore'));
+  }
+}
+
+customElements.define('show-more-button', ShowMoreButton);
