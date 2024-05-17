@@ -197,3 +197,28 @@ getElement("[data-list-items]").addEventListener("click", (event) => {
       }
     }
   });
+
+  // Book Previews as web components.
+class BookPreviewComponent extends HTMLElement {
+  constructor() {
+    super();
+  
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback() {
+    const { author, id, image, title } = this.dataset;
+    this.shadowRoot.innerHTML = `
+      <style>
+        /* Styles for the book preview */
+      </style>
+      <button class="preview" data-preview="${id}">
+        <img class="preview__image" src="${image}" />
+        <div class="preview__info">
+          <h3 class="preview__title">${title}</h3>
+          <div class="preview__author">${authors[author]}</div>
+        </div>
+      </button>
+    `;
+  }
+}
