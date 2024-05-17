@@ -260,3 +260,40 @@ class FilterDropdown extends HTMLElement {
   // Define custom elements for genre and author dropdowns
   customElements.define('genre-dropdown', FilterDropdown);
   customElements.define('author-dropdown', FilterDropdown);
+
+  // themeSwitcher as web components
+  class ThemeSwitcher extends HTMLElement {
+    constructor() {
+      super();
+      this.attachShadow({ mode: 'open' });
+      this.theme = 'day'; // Default theme
+    }
+  
+    connectedCallback() {
+      this.render();
+      this.shadowRoot.querySelector('select').addEventListener('change', this.changeTheme.bind(this));
+    }
+  
+    render() {
+      const select = document.createElement('select');
+      const optionDay = document.createElement('option');
+      optionDay.value = 'day';
+      optionDay.innerText = 'Day';
+      const optionNight = document.createElement('option');
+      optionNight.value = 'night';
+      optionNight.innerText = 'Night';
+      select.appendChild(optionDay);
+      select.appendChild(optionNight);
+      select.value = this.theme;
+      this.shadowRoot.appendChild(select);
+    }
+  
+    changeTheme(event) {
+      this.theme = event.target.value;
+      this.dispatchEvent(new CustomEvent('themeChange', { detail: this.theme }));
+    }
+  }
+  
+  customElements.define('theme-switcher', ThemeSwitcher);
+
+  
