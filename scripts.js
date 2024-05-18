@@ -1,6 +1,7 @@
 // Importing data and constants from external module
 import { books, authors, genres, BOOKS_PER_PAGE } from './data.js';
-import {bookPreviewComponent} from './bookPreviewComponent.js';
+import './bookPreviewComponent.js';
+import './showMoreButton.js';
 
 
 // Initializing variables for pagination and filtering

@@ -1,3 +1,4 @@
+ 
 class BookPreview extends HTMLElement {
   constructor() {
     super();
@@ -8,11 +9,11 @@ class BookPreview extends HTMLElement {
   //   return ['author', 'id', 'image', 'title'];
   // }
 
-  // attributeChangedCallback(name, oldValue, newValue) {
-  //   if (oldValue !== newValue) {
-  //     this.render();
-  //   }
-  // }
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue !== newValue) {
+      this.render();
+    }
+  }
 
   connectedCallback() {
     this.render();
