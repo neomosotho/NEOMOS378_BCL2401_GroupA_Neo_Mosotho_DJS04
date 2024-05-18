@@ -1,5 +1,7 @@
 // Importing data and constants from external module
 import { books, authors, genres, BOOKS_PER_PAGE } from './data.js';
+import {bookPreviewComponent} from './bookPreviewComponent.js';
+
 
 // Initializing variables for pagination and filtering
 let page = 1;
@@ -198,172 +200,147 @@ getElement("[data-list-items]").addEventListener("click", (event) => {
     }
   });
 
-  // Book Previews as web components.
-class bookPreviewComponent extends HTMLElement {
-  constructor() {
-    super();
+ 
+
+// // FilterDropdown as web components
+// class FilterDropdown extends HTMLElement {
+//   constructor() {
+//     super();
+//     this.attachShadow({ mode: 'open' });
+//   }
+
+//   connectedCallback() {
+//       const { label, options } = this.dataset;
+//       const select = document.createElement('select');
+//       const defaultOption = document.createElement('option');
+//       defaultOption.value = 'any';
+//       defaultOption.innerText = `All ${label}`;
+//       select.appendChild(defaultOption);
+//       Object.entries(JSON.parse(options)).forEach(([id, name]) => {
+//         const option = document.createElement('option');
+//         option.value = id;
+//         option.innerText = name;
+//         select.appendChild(option);
+//       });
+//       select.addEventListener('change', () => this.dispatchEvent(new Event('filterChange')));
+//       this.shadowRoot.appendChild(select);
+//       const style = document.createElement('style');
+//       style.textContent = `
+//         select {
+//           /* Add your select styles here */
+//         }
+//       `;
+//       this.shadowRoot.appendChild(style);
+//     }
+//   }
   
-    this.attachShadow({ mode: 'open' });
-  }
+//   // Define custom elements for genre and author dropdowns
+//   customElements.define('genre-dropdown', FilterDropdown);
+//   customElements.define('author-dropdown', FilterDropdown);
 
-  connectedCallback() {
-    const { author, id, image, title } = this.dataset;
-    this.shadowRoot.innerHTML = `
-      <style>
-        /* Styles for the book preview */
-      </style>
-      <button class="preview" data-preview="${id}">
-        <img class="preview__image" src="${image}" />
-        <div class="preview__info">
-          <h3 class="preview__title">${title}</h3>
-          <div class="preview__author">${authors[author]}</div>
-        </div>
-      </button>
-    `;
-  }
-}
-
-customElements.define('book-preview', bookPreviewComponent);
-
-// FilterDropdown as web components
-class FilterDropdown extends HTMLElement {
-  constructor() {
-    super();
-    this.attachShadow({ mode: 'open' });
-  }
-
-  connectedCallback() {
-      const { label, options } = this.dataset;
-      const select = document.createElement('select');
-      const defaultOption = document.createElement('option');
-      defaultOption.value = 'any';
-      defaultOption.innerText = `All ${label}`;
-      select.appendChild(defaultOption);
-      Object.entries(JSON.parse(options)).forEach(([id, name]) => {
-        const option = document.createElement('option');
-        option.value = id;
-        option.innerText = name;
-        select.appendChild(option);
-      });
-      select.addEventListener('change', () => this.dispatchEvent(new Event('filterChange')));
-      this.shadowRoot.appendChild(select);
-      const style = document.createElement('style');
-      style.textContent = `
-        select {
-          /* Add your select styles here */
-        }
-      `;
-      this.shadowRoot.appendChild(style);
-    }
-  }
+//   // themeSwitcher as web components
+//   class ThemeSwitcher extends HTMLElement {
+//     constructor() {
+//       super();
+//       this.attachShadow({ mode: 'open' });
+//       this.theme = 'day'; // Default theme
+//     }
   
-  // Define custom elements for genre and author dropdowns
-  customElements.define('genre-dropdown', FilterDropdown);
-  customElements.define('author-dropdown', FilterDropdown);
-
-  // themeSwitcher as web components
-  class ThemeSwitcher extends HTMLElement {
-    constructor() {
-      super();
-      this.attachShadow({ mode: 'open' });
-      this.theme = 'day'; // Default theme
-    }
+//     connectedCallback() {
+//       this.render();
+//       this.shadowRoot.querySelector('select').addEventListener('change', this.changeTheme.bind(this));
+//     }
   
-    connectedCallback() {
-      this.render();
-      this.shadowRoot.querySelector('select').addEventListener('change', this.changeTheme.bind(this));
-    }
+//     render() {
+//       const select = document.createElement('select');
+//       const optionDay = document.createElement('option');
+//       optionDay.value = 'day';
+//       optionDay.innerText = 'Day';
+//       const optionNight = document.createElement('option');
+//       optionNight.value = 'night';
+//       optionNight.innerText = 'Night';
+//       select.appendChild(optionDay);
+//       select.appendChild(optionNight);
+//       select.value = this.theme;
+//       this.shadowRoot.appendChild(select);
+//     }
   
-    render() {
-      const select = document.createElement('select');
-      const optionDay = document.createElement('option');
-      optionDay.value = 'day';
-      optionDay.innerText = 'Day';
-      const optionNight = document.createElement('option');
-      optionNight.value = 'night';
-      optionNight.innerText = 'Night';
-      select.appendChild(optionDay);
-      select.appendChild(optionNight);
-      select.value = this.theme;
-      this.shadowRoot.appendChild(select);
-    }
+//     changeTheme(event) {
+//       this.theme = event.target.value;
+//       this.dispatchEvent(new CustomEvent('themeChange', { detail: this.theme }));
+//     }
+//   }
   
-    changeTheme(event) {
-      this.theme = event.target.value;
-      this.dispatchEvent(new CustomEvent('themeChange', { detail: this.theme }));
-    }
-  }
+//   customElements.define('theme-switcher', ThemeSwitcher);
+
+//   // Search-form web components
+//   class SearchForm extends HTMLElement {
+//     constructor() {
+//       super();
+//       this.attachShadow({ mode: 'open' });
+//     }
   
-  customElements.define('theme-switcher', ThemeSwitcher);
-
-  // Search-form web components
-  class SearchForm extends HTMLElement {
-    constructor() {
-      super();
-      this.attachShadow({ mode: 'open' });
-    }
+//     connectedCallback() {
+//       this.render();
+//       this.shadowRoot.querySelector('form').addEventListener('submit', this.handleFormSubmit.bind(this));
+//     }
   
-    connectedCallback() {
-      this.render();
-      this.shadowRoot.querySelector('form').addEventListener('submit', this.handleFormSubmit.bind(this));
-    }
+//     render() {
+//       const form = document.createElement('form');
+//       form.innerHTML = `
+//         <input type="text" placeholder="Search..." name="search" />
+//         <button type="submit">Search</button>
+//       `;
+//       this.shadowRoot.appendChild(form);
+//     }
   
-    render() {
-      const form = document.createElement('form');
-      form.innerHTML = `
-        <input type="text" placeholder="Search..." name="search" />
-        <button type="submit">Search</button>
-      `;
-      this.shadowRoot.appendChild(form);
-    }
+//     handleFormSubmit(event) {
+//       event.preventDefault();
+//       const formData = new FormData(event.target);
+//       const searchQuery = formData.get('search');
+//       this.dispatchEvent(new CustomEvent('search', { detail: searchQuery }));
+//     }
+//   }
   
-    handleFormSubmit(event) {
-      event.preventDefault();
-      const formData = new FormData(event.target);
-      const searchQuery = formData.get('search');
-      this.dispatchEvent(new CustomEvent('search', { detail: searchQuery }));
-    }
-  }
-  
-  customElements.define('search-form', SearchForm);
+//   customElements.define('search-form', SearchForm);
 
-// showMoreButton as web components
-class ShowMoreButton extends HTMLElement {
-  constructor() {
-    super();
-    this.attachShadow({ mode: 'open' });
-    this.remainingBooks = 0;
-  }
+// // showMoreButton as web components
+// class ShowMoreButton extends HTMLElement {
+//   constructor() {
+//     super();
+//     this.attachShadow({ mode: 'open' });
+//     this.remainingBooks = 0;
+//   }
 
-  static get observedAttributes() {
-    return ['remaining'];
-  }
+//   static get observedAttributes() {
+//     return ['remaining'];
+//   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (name === 'remaining') {
-      this.remainingBooks = parseInt(newValue);
-      this.render();
-    }
-  }
+//   attributeChangedCallback(name, oldValue, newValue) {
+//     if (name === 'remaining') {
+//       this.remainingBooks = parseInt(newValue);
+//       this.render();
+//     }
+//   }
 
-  connectedCallback() {
-    this.render();
-    this.shadowRoot.querySelector('button').addEventListener('click', this.handleButtonClick.bind(this));
-  }
+//   connectedCallback() {
+//     this.render();
+//     this.shadowRoot.querySelector('button').addEventListener('click', this.handleButtonClick.bind(this));
+//   }
 
-  render() {
-    const button = document.createElement('button');
-    button.innerHTML = `
-      <span>Show more</span>
-      <span class="list__remaining">(${this.remainingBooks > 0 ? this.remainingBooks : 0})</span>
-    `;
-    this.shadowRoot.innerHTML = '';
-    this.shadowRoot.appendChild(button);
-  }
+//   render() {
+//     const button = document.createElement('button');
+//     button.innerHTML = `
+//       <span>Show more</span>
+//       <span class="list__remaining">(${this.remainingBooks > 0 ? this.remainingBooks : 0})</span>
+//     `;
+//     this.shadowRoot.innerHTML = '';
+//     this.shadowRoot.appendChild(button);
+//   }
 
-  handleButtonClick() {
-    this.dispatchEvent(new CustomEvent('showMore'));
-  }
-}
+//   handleButtonClick() {
+//     this.dispatchEvent(new CustomEvent('showMore'));
+//   }
+// }
 
-customElements.define('show-more-button', ShowMoreButton);
+// customElements.define('show-more-button', ShowMoreButton);
